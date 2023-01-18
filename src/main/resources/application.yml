@@ -1,0 +1,11 @@
+spring:
+
+  application:
+    name: Rez Recaller
+
+logging:
+  level:
+    au.com.schmick: debug
+#        io.netty: info
+  pattern:
+    console: "%black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%logger{1}): %msg%n%throwable"

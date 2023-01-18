@@ -1,0 +1,4 @@
+logging:
+  level:
+    org.springframework.boot.autoconfigure.mongo.embedded: info
+    org.mongodb: info
