@@ -17,7 +17,7 @@ public class MongoDBContainerExtension implements BeforeAllCallback, AfterAllCal
         DockerImageName.parse("mongo:4.4.18"));
 
     mongoDBContainer.start();
-    System.setProperty("spring.data.mongodb.uri", mongoDBContainer.getReplicaSetUrl());
+    System.setProperty("spring.data.mongodb.uri", mongoDBContainer.getReplicaSetUrl()+"?retryWrites=false");
   }
 
   @Override
