@@ -1,11 +1,45 @@
 spring:
-
   application:
     name: Rez Recaller
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/rezources
+      database: local
+
 
 logging:
   level:
     au.com.schmick: debug
-#        io.netty: info
+# mongo template query logging
+    org:
+      springframework:
+        data:
+          mongodb:
+            core:
+              ReactiveMongoTemplate: DEBUG
+
+  #        io.netty: info
   pattern:
     console: "%black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%logger{1}): %msg%n%throwable"
+
+###
+### mongo config
+####
+
+###
+### web config
+###
+server:
+  servlet:
+    context-path: /
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+    min-response-size: 1024
+  http2:
+    enabled: true
+#  port: 8080
+#springdoc:
+#  version: '@springdoc.version@'
+#  swagger-ui:
+#    use-root-path: true

@@ -3,15 +3,13 @@ package au.com.schmick.rezrecall.db.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigInteger;
-import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Singular;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
+@Document(collection = "rezources")
 @Getter
 @Builder
 @ToString
@@ -24,8 +22,10 @@ public class Rezource {
   private String title;
 
   @JsonProperty(required = true)
-  @Singular
-  private List<Author> authors;
+  private Author primaryAuthor;
+
+  @JsonProperty
+  private Author secondaryAuthor;
 
   @JsonProperty(required = true)
   @Builder.Default

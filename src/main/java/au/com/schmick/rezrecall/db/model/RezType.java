@@ -1,6 +1,17 @@
 package au.com.schmick.rezrecall.db.model;
 
+import lombok.ToString;
+
+@ToString
 public enum RezType {
-  BOOK, ART_LESSON, MATH_LESSON, LANG_LESSON, SCIENCE_LESSON;
+  BOOK("Book"), ART_LESSON("Art Lesson"), MATH_LESSON("Math Lesson"), LANG_LESSON(
+      "Language Lesson"), SCIENCE_LESSON("Science Lesson");
+
+  private String description;
+
+  RezType(String description) {
+    this.description = description;
+  }
+
 
 }
