@@ -19,6 +19,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -62,7 +63,8 @@ class RezrecallQueryIT {
           MatcherAssert.assertThat("Query mismatched results", r,
               hasProperty("title", equalTo("Nineteen Eighty Four")));
         })
-        .thenConsumeWhile(r -> Objects.nonNull(r))
+        .thenConsumeWhile(
+            Objects::nonNull) // doing this because can't stop context loading the app with the example record inserted.
 //        .thenCancel().verify();
         .verifyComplete();
   }
