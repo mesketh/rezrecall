@@ -4,8 +4,14 @@ import lombok.ToString;
 
 @ToString
 public enum RezType {
-  BOOK("Book"), ART_LESSON("Art Lesson"), MATH_LESSON("Math Lesson"), LANG_LESSON(
-      "Language Lesson"), SCIENCE_LESSON("Science Lesson");
+  // formatter:off
+  BOOK("Book"),
+  ART_LESSON("Art Lesson"),
+  MATH_LESSON("Math Lesson"),
+  LANG_LESSON("Language Lesson"),
+  SCIENCE_LESSON("Science Lesson");
+  // formatter:on
+
 
   private String description;
 

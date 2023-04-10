@@ -19,9 +19,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -62,6 +60,10 @@ class RezrecallQueryIT {
           MatcherAssert.assertThat("Query returned null rezource", r, is(notNullValue()));
           MatcherAssert.assertThat("Query mismatched results", r,
               hasProperty("title", equalTo("Nineteen Eighty Four")));
+          MatcherAssert.assertThat("Query mismatched results", r,
+              hasProperty("location", equalTo("L-1-3")));
+          MatcherAssert.assertThat("Query mismatched results", r,
+              hasProperty("type", equalTo(RezType.BOOK)));
         })
         .thenConsumeWhile(
             Objects::nonNull) // doing this because can't stop context loading the app with the example record inserted.

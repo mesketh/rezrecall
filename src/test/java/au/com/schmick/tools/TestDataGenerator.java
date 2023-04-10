@@ -9,9 +9,12 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Locale;
+import java.util.Random;
 import net.datafaker.Faker;
 import net.datafaker.transformations.Field;
 import net.datafaker.transformations.JsonTransformer;
+import net.datafaker.transformations.JsonTransformer.JsonTransformerBuilder.FormattedAs;
 import net.datafaker.transformations.Schema;
 
 public class TestDataGenerator {
@@ -29,7 +32,8 @@ public class TestDataGenerator {
     // exportedData resource records
     Faker faker = new Faker();
 
-    JsonTransformer<Rezource> transformer = new JsonTransformer<>();
+    JsonTransformer<Rezource> transformer = JsonTransformer.<Rezource>builder().formattedAs(
+        FormattedAs.JSON_ARRAY).build();
     String exportedData = transformer.generate(rezourceSchema(faker), 200);
 
     System.out.println(exportedData);
@@ -49,14 +53,15 @@ public class TestDataGenerator {
                 field("firstName", faker.name()::firstName),
                 field("familyName", faker.name()::lastName)}),
         field("title", faker.book()::title),
-        field("type", RezType.BOOK::name),
-//        field("type", this::buildRezType),
+//        field("type", RezType.BOOK::name),
+        field("type", this::buildRezType),
+        field("_class", () -> "au.com.schmick.rezrecall.db.model.Rezource"),
         field("location",
-            () -> faker.expression("\"#{regexify '(L|R|B)-[1-4]-[1-4]'}")));
+            () -> faker.expression("#{regexify '(L|R|B)-[1-4]-[1-4]'}")));
   }
 
-  private RezType buildRezType() {
-    return RezType.values()[Math.round((float) (Math.random() * (RezType.values().length - 1)))];
+  private String buildRezType() {
+    return RezType.values()[Math.round((float) (Math.random() * (RezType.values().length - 1)))].name();
   }
 
 }
