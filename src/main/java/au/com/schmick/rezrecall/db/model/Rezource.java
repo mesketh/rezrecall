@@ -3,6 +3,7 @@ package au.com.schmick.rezrecall.db.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigInteger;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
