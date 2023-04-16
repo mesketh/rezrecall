@@ -37,7 +37,7 @@ import reactor.test.StepVerifier;
     @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = {SpringBootApplication.class})})
 @ActiveProfiles(profiles = "test")
 @Slf4j
-class RezrecallQueryIT {
+class RezRepositoryIT {
 
   @Autowired
   ReactiveMongoTemplate mongoTemplate;

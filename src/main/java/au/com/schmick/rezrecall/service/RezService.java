@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers;
-import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
@@ -28,6 +27,5 @@ public class RezService {
         withMatcher("location", GenericPropertyMatchers.startsWith().ignoreCase());
 
     return repository.findAll(Example.of(byCriteria, exampleMatcher));
-
   }
 }

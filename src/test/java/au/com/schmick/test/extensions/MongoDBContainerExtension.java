@@ -6,9 +6,11 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.utility.DockerImageName;
 
-public class MongoDBContainerExtension implements BeforeAllCallback, AfterAllCallback {
-
-  private MongoDBContainer mongoDBContainer;
+/**
+ * Disables retryable writes for TestContainer orchestrated mongodb (standalone).
+ * See <a href="https://www.mongodb.com/docs/manual/core/retryable-writes/#prerequisites">PreRequisites</a>.
+ */
+public class MongoDBContainerExtension implements BeforeAllCallback {
 
   @Override
   public void beforeAll(ExtensionContext context) {
@@ -20,8 +22,4 @@ public class MongoDBContainerExtension implements BeforeAllCallback, AfterAllCal
     System.setProperty("spring.data.mongodb.uri", mongoDBContainer.getReplicaSetUrl()+"?retryWrites=false");
   }
 
-  @Override
-  public void afterAll(ExtensionContext context) {
-    // do nothing, Testcontainers handles container shutdown
-  }
 }
