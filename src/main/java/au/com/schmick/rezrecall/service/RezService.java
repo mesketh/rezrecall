@@ -16,19 +16,16 @@ import reactor.core.publisher.Flux;
 public class RezService {
 
   @Autowired
-  private ReactiveMongoTemplate mongoTemplate;
-
-  @Autowired
   private RezRepository repository;
 
   public Flux<Rezource> searchResource(Rezource byCriteria) {
 
     ExampleMatcher exampleMatcher = ExampleMatcher.matchingAll().
-        withMatcher("title", GenericPropertyMatchers.exact().ignoreCase());
-//        withMatcher("primaryAuthor.firstName", GenericPropertyMatchers.startsWith().ignoreCase()).
-//        withMatcher("primaryAuthor.lastName", GenericPropertyMatchers.startsWith().ignoreCase()).
-//        withMatcher("type", GenericPropertyMatchers.exact().caseSensitive()).
-//        withMatcher("location", GenericPropertyMatchers.startsWith().ignoreCase());
+        withMatcher("title", GenericPropertyMatchers.exact().ignoreCase()).
+        withMatcher("primaryAuthor.firstName", GenericPropertyMatchers.startsWith().ignoreCase()).
+        withMatcher("primaryAuthor.lastName", GenericPropertyMatchers.startsWith().ignoreCase()).
+        withMatcher("type", GenericPropertyMatchers.exact().caseSensitive()).
+        withMatcher("location", GenericPropertyMatchers.startsWith().ignoreCase());
 
     return repository.findAll(Example.of(byCriteria, exampleMatcher));
 
