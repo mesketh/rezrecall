@@ -9,8 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Locale;
-import java.util.Random;
 import net.datafaker.Faker;
 import net.datafaker.transformations.Field;
 import net.datafaker.transformations.JsonTransformer;
@@ -43,7 +41,7 @@ public class TestDataGenerator {
       dataFile.delete();
     }
 
-    Files.write(dataFile.toPath(), exportedData.getBytes("UTF-8"));
+    Files.writeString(dataFile.toPath(), exportedData);
   }
 
   private Schema rezourceSchema(Faker faker) {
