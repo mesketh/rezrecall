@@ -1,0 +1,21 @@
+#- uses: muinmomin/webhook-action@v1.0.0
+name: Rezrecall build and test
+run-name: ${{ github.actor }} build + test of Rezrecall monoropo 🚀
+on:
+  push:
+    branches:
+      - 'main'
+jobs:
+  Build_Test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Maven build and test
+        run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - name: tell Mark about it via Slack
+        uses: muinmomin/webhook-action@v1.0.0
+        with:
+          url: ${{ secrets.TELL_MARK_WEBHOOK_URL }}
+          data: "{\"text\": \"This is a line of text in a channel.\nAnd this is another line of text.\"}"
+        run: |
+          echo "Let Mark know about the latest build and test results... 📧"
+

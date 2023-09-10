@@ -12,16 +12,20 @@ import au.com.schmick.rezrecall.db.model.Rezource;
 import au.com.schmick.rezrecall.db.model.Rezource.RezourceBuilder;
 import au.com.schmick.rezrecall.service.RezService;
 import au.com.schmick.test.extensions.MongoDBContainerExtension;
-import com.mongodb.reactivestreams.client.MongoCollection;
+import com.mongodb.client.result.DeleteResult;
+import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.BsonDocument;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
@@ -52,20 +56,24 @@ class RezResourceIT {
   @Autowired
   RezService rezService;
 
-  @BeforeEach
-  void insertTestData() {
-    mongoTemplate.insert(Rezource.builder()
+  //  @BeforeEach
+  public Rezource insertTestData() {
+    var rezource = Rezource.builder()
         .primaryAuthor(Author.builder().firstName("George").familyName("Orwell").build())
         .title("Nineteen Eighty Four")
         .type(RezType.BOOK)  // TODO builder default not working for enum?
         .location("L-1-3")
-        .build(), "rezources").block();
+        .build();
+    rezource = mongoTemplate.insert(rezource, "rezources").block();
+    log.debug("Inserting rezource {}", rezource);
+    return rezource;
   }
 
   @Test
   @DisplayName("Test basic insert and findAll")
   public void givenRepositoryWithSingleResource_whenFindingAllResources_thenSuccess() {
 
+    insertTestData();
     Flux<Rezource> matchingRezources = mongoTemplate.findAll(Rezource.class, "rezources");
 
     StepVerifier.create(matchingRezources.log())
@@ -89,26 +97,60 @@ class RezResourceIT {
   @DisplayName("Service layer test search - blank criteria (fetch all)")
   public void givenRepositoryWithResources_whenSearchingForAll_thenSuccess() {
 
+    var rezource = insertTestData();
     Flux<Rezource> rezourceFlux = rezService.searchResource(Rezource.builder().build());
+//    Rezource rezource = insertTestData();
     StepVerifier.create(rezourceFlux.log())
-        .expectNextCount(1).verifyComplete();
+        .expectSubscription()
+        .expectNext(rezource)
+        .verifyComplete();
   }
+
   @Test
   @DisplayName("Service layer test search - find by single criteria (family name)")
   public void givenRepositoryWithResources_whenSearchingByAuthorFamilyName_thenSuccess() {
 
+    var rezource = insertTestData();
     RezourceBuilder orwell = Rezource.builder()
-        .primaryAuthor(Author.builder().familyName("Orwell").build()).type(null); // overwrite default type
+        .primaryAuthor(Author.builder().familyName("Orwell").build())
+        .type(null); // overwrite default type
     Flux<Rezource> rezourceFlux = rezService.searchResource(orwell.build());
     StepVerifier.create(rezourceFlux.log())
-        .expectNextCount(1).verifyComplete();
+        .expectSubscription()
+        .recordWith(ArrayList::new)
+        .expectNextCount(1)
+        .expectRecordedMatches(c -> c.contains(rezource))
+        .verifyComplete();
   }
 
   @AfterEach
   void deleteTestData() {
-    Optional.ofNullable(mongoTemplate.getMongoDatabase().block())
+    Optional.ofNullable(mongoTemplate.getMongoDatabase().block(Duration.ofMillis(5)))
         .map(mdb -> mdb.getCollection("rezources"))
-        .ifPresent(
-            MongoCollection::drop);
+        .ifPresent(c -> c.deleteMany(BsonDocument.parse("{}")).subscribe(
+            new Subscriber<DeleteResult>() {
+              @Override
+              public void onSubscribe(Subscription subscription) {
+                subscription.request(1);
+              }
+
+              @Override
+              public void onNext(DeleteResult deleteResult) {
+                log.debug("deleted? {}",
+                    deleteResult.wasAcknowledged() && deleteResult.getDeletedCount() > 0);
+
+              }
+
+
+              @Override
+              public void onError(Throwable throwable) {
+                log.error("Failed to drop rezources collection after test", throwable);
+              }
+
+              @Override
+              public void onComplete() {
+                log.info("Dropped rezources successfully 🚀");
+              }
+            }));
   }
 }

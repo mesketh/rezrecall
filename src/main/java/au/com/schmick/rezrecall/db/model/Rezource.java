@@ -3,8 +3,8 @@ package au.com.schmick.rezrecall.db.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigInteger;
-import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Getter
 @Builder
 @ToString
+@EqualsAndHashCode
 public class Rezource {
 
   @Id

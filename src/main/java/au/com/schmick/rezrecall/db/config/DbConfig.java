@@ -27,6 +27,7 @@ public class DbConfig extends AbstractReactiveMongoConfiguration {
 
   @Override
   protected Collection<String> getMappingBasePackages() {
+
     return Set.of("au.com.schmick.rezrecall.db.model");
   }
 
