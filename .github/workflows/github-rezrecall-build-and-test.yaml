@@ -13,7 +13,7 @@ jobs:
         run: echo "🎉 The job will run unit tests on Rezrecall for ${{ github.event_name }}) event."
       - name: Check out repository code
         uses: actions/checkout@v3
-        run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
