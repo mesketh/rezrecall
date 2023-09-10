@@ -16,6 +16,6 @@ jobs:
         with:
           url: ${{ secrets.TELL_MARK_WEBHOOK_URL }}
           data: "{\"text\": \"This is a line of text in a channel.\nAnd this is another line of text.\"}"
-        run: |
-          echo "Let Mark know about the latest build and test results... 📧"
+      - name: Completed
+        run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
 
