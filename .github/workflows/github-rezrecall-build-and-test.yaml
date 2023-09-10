@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Maven build and test
         run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - name: Run tests
+        run: mvn -B clean integration-test
       - name: Notify author about results
         uses: jasongitmail/fast-webhook@v1.1.4
         with:
