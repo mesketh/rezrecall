@@ -12,8 +12,8 @@ jobs:
       - name: Maven build and test
         run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - name: tell Mark about it via Slack
-        uses: muinmomin/webhook-action@v1.0.0
+        uses: jasongitmail/fast-webhook@v1
         with:
           url: ${{ secrets.TELL_MARK_WEBHOOK_URL }}
-          data: ''{ "text": "This is a line of text in a channel.\nAnd this is another line of text." }'
+          json: '{ "text": "This is a line of text in a channel.\nAnd this is another line of text." }'
 
