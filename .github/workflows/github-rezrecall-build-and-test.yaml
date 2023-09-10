@@ -9,7 +9,6 @@ jobs:
   Rezrecall_Build_Test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
       - name: Maven build and test
         run: echo "🎉 The job will run unit tests on Rezrecall for ${{ github.event_name }}) event."
       - name: Check out repository code
