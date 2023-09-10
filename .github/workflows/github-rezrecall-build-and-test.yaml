@@ -11,9 +11,9 @@ jobs:
     steps:
       - name: Maven build and test
         run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - name: tell Mark about it via Slack
-        uses: jasongitmail/fast-webhook@v1
+      - name: Notify author about results
+        uses: jasongitmail/fast-webhook@v1.1.4
         with:
           url: ${{ secrets.TELL_MARK_WEBHOOK_URL }}
-          json: '{ "text": "This is a line of text in a channel.\nAnd this is another line of text." }'
+          json: '{ "text": "Completed a build and test of Rezrecall 🚀" }'
 
