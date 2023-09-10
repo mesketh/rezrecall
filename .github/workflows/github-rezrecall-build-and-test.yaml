@@ -15,5 +15,5 @@ jobs:
         uses: muinmomin/webhook-action@v1.0.0
         with:
           url: ${{ secrets.TELL_MARK_WEBHOOK_URL }}
-          data: "{\"text\": \"This is a line of text in a channel.\nAnd this is another line of text.\" }"
+          data: ''{ "text": "This is a line of text in a channel.\nAnd this is another line of text." }'
 
