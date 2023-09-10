@@ -21,13 +21,13 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
+      - name: Build with Maven
+        run: mvn -B -U integration-test
       - run: mkdir artifacts-upload && cp target/*.jar artifacts-upload
       - uses: actions/upload-artifact@v3
         with:
           name: Package
           path: artifacts-upload
-      - name: Build with Maven
-        run: mvn -B -U integration-test
       - name: Notify author about results
         uses: jasongitmail/fast-webhook@v1.1.4
         with:
