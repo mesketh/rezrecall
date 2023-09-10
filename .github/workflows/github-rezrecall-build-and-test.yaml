@@ -15,7 +15,5 @@ jobs:
         uses: muinmomin/webhook-action@v1.0.0
         with:
           url: ${{ secrets.TELL_MARK_WEBHOOK_URL }}
-          data: "{\"text\": \"This is a line of text in a channel.\nAnd this is another line of text.\"}"
-      - name: Completed
-        run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+          data: "{"text": "This is a line of text in a channel.\nAnd this is another line of text." }"
 
