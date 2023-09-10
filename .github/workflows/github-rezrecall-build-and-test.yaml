@@ -6,13 +6,28 @@ on:
     branches:
       - 'main'
 jobs:
-  Build_Test:
+  Rezrecall_Build_Test:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - name: Maven build and test
-        run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - name: Run tests
-        run: mvn -B clean integration-test
+        run: echo "🎉 The job will run unit tests on Rezrecall trigger:: ${{ github.event_name }}) event."
+      - name: Check out repository code
+        uses: actions/checkout@v3
+        run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+      - run: mkdir artifacts-upload && cp target/*.jar artifacts-upload
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Package
+          path: artifacts-upload
+      - name: Build with Maven
+        run: mvn -B -U integration-test
       - name: Notify author about results
         uses: jasongitmail/fast-webhook@v1.1.4
         with:
