@@ -40,10 +40,12 @@ server:
     enabled: true
 #  port: 8080
 
-#springdoc:
-#  api-docs:
-#    enabled: true
-#    version: openapi_3_1
-#  swagger-ui:
-#    use-root-path: true
-#    path: /swagger
+springdoc:
+  api-docs:
+    enabled: true
+    version: openapi_3_1
+    path: /api-docs
+  swagger-ui:
+    use-root-path: true
+    path: /swagger
+#    version:

@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.0.1</version>
+    <version>3.1.1</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>au.com.schmick</groupId>
@@ -15,6 +15,8 @@
   <name>rezrecall</name>
   <description>App for finding Renee&apos;s teacher resources</description>
   <properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
     <java.version>17</java.version>
     <testcontainers.version>1.17.6</testcontainers.version>
   </properties>
@@ -78,7 +80,13 @@
     <dependency>
       <groupId>org.springdoc</groupId>
       <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-      <version>2.0.2</version>
+      <version>2.1.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+      <version>2.1.0</version>
     </dependency>
 
     <dependency>
@@ -125,8 +133,6 @@
       <version>1.8.1</version>
     </dependency>
 
-
-
   </dependencies>
 
   <dependencyManagement>
@@ -146,6 +152,22 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <image>
+            <!--            <buildpacks>-->
+            <!--              <buildpack>gcr.io/paketo-buildpacks/amazon-corretto</buildpack>-->
+            <!--              <buildpack>gcr.io/paketo-buildpacks/java-native-image</buildpack>-->
+            <!--            </buildpacks>            -->
+            <env>
+              <BP_JVM_VERSION>17.0.7</BP_JVM_VERSION>
+              <!--              <BP_JVM_TYPE>jdk</BP_JVM_TYPE>-->
+            </env>
+          </image>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.graalvm.buildtools</groupId>
+        <artifactId>native-maven-plugin</artifactId>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
