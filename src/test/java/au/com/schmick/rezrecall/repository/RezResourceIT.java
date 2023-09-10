@@ -13,7 +13,6 @@ import au.com.schmick.rezrecall.db.model.Rezource.RezourceBuilder;
 import au.com.schmick.rezrecall.service.RezService;
 import au.com.schmick.test.extensions.MongoDBContainerExtension;
 import com.mongodb.client.result.DeleteResult;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
@@ -125,10 +124,10 @@ class RezResourceIT {
 
   @AfterEach
   void deleteTestData() {
-    Optional.ofNullable(mongoTemplate.getMongoDatabase().block(Duration.ofMillis(5)))
+    Optional.ofNullable(mongoTemplate.getMongoDatabase().block())
         .map(mdb -> mdb.getCollection("rezources"))
         .ifPresent(c -> c.deleteMany(BsonDocument.parse("{}")).subscribe(
-            new Subscriber<DeleteResult>() {
+            new Subscriber<>() {
               @Override
               public void onSubscribe(Subscription subscription) {
                 subscription.request(1);
@@ -140,7 +139,6 @@ class RezResourceIT {
                     deleteResult.wasAcknowledged() && deleteResult.getDeletedCount() > 0);
 
               }
-
 
               @Override
               public void onError(Throwable throwable) {
