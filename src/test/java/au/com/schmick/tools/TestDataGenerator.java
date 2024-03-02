@@ -44,7 +44,7 @@ public class TestDataGenerator {
     Files.writeString(dataFile.toPath(), exportedData);
   }
 
-  private Schema rezourceSchema(Faker faker) {
+  private Schema<Rezource, ?> rezourceSchema(Faker faker) {
 
     return Schema.of(compositeField("primaryAuthor",
             new Field[]{

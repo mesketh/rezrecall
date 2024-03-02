@@ -28,4 +28,16 @@ public class RezService {
 
     return repository.findAll(Example.of(byCriteria, exampleMatcher));
   }
+
+  public Flux<Rezource> byTitlePartial(String title) {
+    return repository.findByTitleContaining(title);
+  }
+
+  public Flux<Rezource> byTitle(String title) {
+    ExampleMatcher titleMatcher = ExampleMatcher.matchingAll().
+        withMatcher("title", GenericPropertyMatchers.contains().ignoreCase());
+
+    return repository.findAll(
+        Example.of(Rezource.builder().title(title).type(null).build(), titleMatcher));
+  }
 }

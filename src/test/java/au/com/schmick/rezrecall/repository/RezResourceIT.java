@@ -10,9 +10,11 @@ import au.com.schmick.rezrecall.db.model.Author;
 import au.com.schmick.rezrecall.db.model.RezType;
 import au.com.schmick.rezrecall.db.model.Rezource;
 import au.com.schmick.rezrecall.db.model.Rezource.RezourceBuilder;
+import au.com.schmick.rezrecall.db.repository.RezRepository;
 import au.com.schmick.rezrecall.service.RezService;
 import au.com.schmick.test.extensions.MongoDBContainerExtension;
 import com.mongodb.client.result.DeleteResult;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
@@ -33,6 +35,7 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
@@ -40,17 +43,21 @@ import reactor.test.StepVerifier;
 
 @Testcontainers
 @ExtendWith(MongoDBContainerExtension.class)
+@ExtendWith(SpringExtension.class)
 @DataMongoTest(excludeAutoConfiguration = {RezrecallApplication.class},
     excludeFilters = {
         @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = {
             SpringBootApplication.class})})
-@Import({RezService.class})
+@Import({RezService.class, RezRepository.class})
 @ActiveProfiles(profiles = "test")
 @Slf4j
 class RezResourceIT {
 
   @Autowired
   ReactiveMongoTemplate mongoTemplate;
+
+  @Autowired
+  RezRepository repository;
 
   @Autowired
   RezService rezService;
@@ -124,10 +131,10 @@ class RezResourceIT {
 
   @AfterEach
   void deleteTestData() {
-    Optional.ofNullable(mongoTemplate.getMongoDatabase().block())
+    Optional.ofNullable(mongoTemplate.getMongoDatabase().block(Duration.ofMillis(5)))
         .map(mdb -> mdb.getCollection("rezources"))
         .ifPresent(c -> c.deleteMany(BsonDocument.parse("{}")).subscribe(
-            new Subscriber<>() {
+            new Subscriber<DeleteResult>() {
               @Override
               public void onSubscribe(Subscription subscription) {
                 subscription.request(1);
@@ -139,6 +146,7 @@ class RezResourceIT {
                     deleteResult.wasAcknowledged() && deleteResult.getDeletedCount() > 0);
 
               }
+
 
               @Override
               public void onError(Throwable throwable) {

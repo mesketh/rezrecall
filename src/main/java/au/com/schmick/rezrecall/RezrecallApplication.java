@@ -3,7 +3,6 @@ package au.com.schmick.rezrecall;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -12,10 +11,10 @@ import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 
 @SpringBootApplication
 @Slf4j
-@OpenAPIDefinition(info = @Info(version = "openapi: \"3.1\""))
+@OpenAPIDefinition(info = @Info(version = "openapi: \"3.0.1\""))
 public class RezrecallApplication {
 
-  @Autowired
+  //  @Autowired
   ReactiveMongoTemplate template;
 
   public static void main(String[] args) {
