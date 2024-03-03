@@ -48,7 +48,7 @@ import reactor.test.StepVerifier;
     excludeFilters = {
         @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = {
             SpringBootApplication.class})})
-@Import({RezService.class, RezRepository.class})
+@Import({RezService.class})
 @ActiveProfiles(profiles = "test")
 @Slf4j
 class RezResourceIT {
@@ -134,7 +134,7 @@ class RezResourceIT {
     Optional.ofNullable(mongoTemplate.getMongoDatabase().block(Duration.ofMillis(5)))
         .map(mdb -> mdb.getCollection("rezources"))
         .ifPresent(c -> c.deleteMany(BsonDocument.parse("{}")).subscribe(
-            new Subscriber<DeleteResult>() {
+            new Subscriber<>() {
               @Override
               public void onSubscribe(Subscription subscription) {
                 subscription.request(1);
